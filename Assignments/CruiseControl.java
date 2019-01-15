@@ -3,13 +3,19 @@ class CruiseControl {
 	static int speed = 0;
 	static final int MAX_SPEED = 45;
 	static int warningSpeed = 30;
-
+    public  static int accelerateSpeed= (int) (Math.random()*6+1);
+	public static int decelerateSpeed = (int) (Math.random()*6+1);
 	public static void main(String[] args) {
-		
-
+	toggleCruiseControl();
+	accelerate(accelerateSpeed);		
+    accelerate(accelerateSpeed);
+    accelerate(accelerateSpeed);
+    decelerate(decelerateSpeed);
+	decelerate(decelerateSpeed);
+	decelerate(decelerateSpeed);
 	}
 
-	public static void toggleCruiseControl() {
+	public static  void toggleCruiseControl() {
 		cruiseControlSet = !cruiseControlSet;
 
 		if(cruiseControlSet) {
@@ -20,10 +26,17 @@ class CruiseControl {
 		}	
 	}
 
-	public static void accelerate() {
-		if (cruiseControlSet && speed < MAX_SPEED) {
-			speed += 5;
+	public static void accelerate(int accelerateSpeed) {
+		if (cruiseControlSet && speed + accelerateSpeed <= MAX_SPEED) {
+			speed += accelerateSpeed;
 		}
+		else if (!cruiseControlSet) {
+			System.out.println("Turn on Cruise Control first !!!") ;
+		}
+	else if (cruiseControlSet && speed + accelerateSpeed >= MAX_SPEED) {
+		speed += MAX_SPEED ;
+		System.out.println("Max Speed reached.");
+	}
 		else {
 			System.out.println("Max speed reached.");
 		}
@@ -35,23 +48,30 @@ class CruiseControl {
 		}
 	}
 
-	public static void decelerate() {
-        if (cruiseControlSet && speed < MAX_SPEED) {
-			speed += 5;
+	public static void decelerate(int decelerateSpeed) {
+        if (cruiseControlSet && speed - decelerateSpeed > 0 ) {
+			speed -= decelerateSpeed;
 		}
+        else if (!cruiseControlSet) {
+			System.out.println("Turn on Cruise Control first !!!") ;
+		}
+		else if (cruiseControlSet && speed - decelerateSpeed <= 0) {
+		speed = 0 ;
+	}
 		else {
-			System.out.println("Max speed reached.");
+			System.out.println("Cannot Decelerate .");
 		}
 
 		System.out.println("Current speed: \t" + speed + "mph");
 
 		if(exceedsWarningThreshold(speed)) {
-			alert(false);
+			alert(true);
 		}
 
 	}
 
 	public static void reportSpeed() {
+		System.out.println("current speed:" + speed);
 
 	}
 
